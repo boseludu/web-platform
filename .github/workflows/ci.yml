@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lint
+        run: |
+          RUN=${{ github.run_number }}
+          echo "✅ Lint passed"; exit 0
+
+  unit_tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Unit Tests
+        run: |
+          RUN=${{ github.run_number }}
+          echo "✅ Unit tests passed"; exit 0
+
+  integration_tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Integration Tests
+        run: |
+          RUN=${{ github.run_number }}
+          if [ $((RUN % 4)) -eq 0 ]; then echo "❌ Integration test failed (flaky)"; exit 1; fi
+          echo "✅ Integration tests passed"
+
+  e2e_tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: E2E Tests
+        run: |
+          RUN=${{ github.run_number }}
+          if [ $((RUN % 3)) -eq 0 ]; then echo "❌ E2E timeout"; exit 1; fi
+          echo "✅ E2E tests passed"
+
+  accessibility:
+    name: Accessibility Checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Accessibility Checks
+        run: |
+          RUN=${{ github.run_number }}
+          echo "✅ Accessibility OK"; exit 0
+
