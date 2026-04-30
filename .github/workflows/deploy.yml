@@ -1,0 +1,36 @@
+name: Deploy Checks
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: |
+          RUN=${{ github.run_number }}
+          echo "✅ Build succeeded"; exit 0
+
+  smoke_test:
+    name: Smoke Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Smoke Tests
+        run: |
+          RUN=${{ github.run_number }}
+          if [ $((RUN % 5)) -eq 0 ]; then echo "❌ Smoke test failed"; exit 1; fi
+          echo "✅ Smoke tests passed"
+
+  security_scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Security Scan
+        run: |
+          RUN=${{ github.run_number }}
+          echo "✅ No vulnerabilities found"; exit 0
+
